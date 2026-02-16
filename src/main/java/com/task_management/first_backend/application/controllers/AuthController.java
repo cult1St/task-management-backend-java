@@ -24,6 +24,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api/v1/auth")
 @RequiredArgsConstructor
+//@CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
 public class AuthController {
     private final UserService userService;
     private final JwtUtils jwtUtils;
@@ -67,7 +68,6 @@ public class AuthController {
             AuthResponseDTO response = new AuthResponseDTO(new UserResponseDTO(user), token);
             return ResponseEntity.status(HttpStatus.CREATED).body(
                     SuccessResponse.of("User Logged In Successfully", response)
-
             );
     }
 

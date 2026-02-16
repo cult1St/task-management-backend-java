@@ -16,8 +16,8 @@ public class ErrorResponse<T> {
     public static <T> ErrorResponse<T> of(String message, T errors){
         return  new ErrorResponse<T>(false, message, 400,  errors);
     }
-    public static <T> ErrorResponse<Void> of(String message){
-        return  new ErrorResponse<Void>(false, message, 400,  null);
+    public static <T> ErrorResponse<Void> of(String message, int status){
+        return  new ErrorResponse<Void>(false, message, status,  null);
     }
     public static <T> ErrorResponse<T> of(T errors){
         return  new ErrorResponse<T>(false, "An Error Occurred", 400,  errors);
