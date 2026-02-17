@@ -1,6 +1,7 @@
 package com.task_management.first_backend.application.services;
 
 import com.task_management.first_backend.application.dto.auth.LoginRequestDTO;
+import com.task_management.first_backend.application.dto.users.UpdateUserRequestDTO;
 import com.task_management.first_backend.application.enums.UserRole;
 import com.task_management.first_backend.application.models.User;
 import com.task_management.first_backend.application.repositories.UserRepository;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.security.InvalidParameterException;
 import java.util.Date;
+import java.util.Optional;
 
 @Service
 @AllArgsConstructor
@@ -38,5 +40,32 @@ public class UserService {
         user.setLastLoginAt(new Date());
         userRepository.save(user);
     }
+
+    public User updateUser(UpdateUserRequestDTO request, Long id) {
+
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        // Update only non-null fields (safe partial update)
+
+        if (request.getFullName() != null) {
+            user.setFullName(request.getFullName());
+        }
+
+        if (request.getEmail() != null) {
+            user.setEmail(request.getEmail());
+        }
+
+        if(request.getRoleTitle() != null){
+            user.setDesignatedRole(request.getRoleTitle());
+        }
+
+        if(request.getAvatarUrl() != null){
+            user.setAvatarUrl(request.getAvatarUrl());
+        }
+
+        return userRepository.save(user);
+    }
+
 
 }

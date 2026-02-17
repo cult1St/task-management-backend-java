@@ -34,7 +34,12 @@ public class User implements UserDetails {
     private String password;
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private UserRole role;
+    private UserRole role = UserRole.USER;
+    private String designatedRole;
+    private String avatarUrl;
+
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private UserSetting userSetting;
     @CreationTimestamp
     private Date lastLoginAt;
     @CreationTimestamp
