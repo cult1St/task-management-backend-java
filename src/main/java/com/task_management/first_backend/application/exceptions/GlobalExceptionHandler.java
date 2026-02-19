@@ -3,8 +3,10 @@ package com.task_management.first_backend.application.exceptions;
 import com.task_management.first_backend.application.dto.ErrorResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.validation.FieldError;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -38,7 +40,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(AccessDeniedException.class)
     public ResponseEntity<?> handleAccessDenied(AccessDeniedException ex){
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(
-                ErrorResponse.of(ex.getMessage(), HttpStatus.FORBIDDEN)
+                ErrorResponse.of(ex.getMessage(), 403)
         );
     }
 
@@ -47,30 +49,45 @@ public class GlobalExceptionHandler {
             org.springframework.security.core.AuthenticationException ex
     ){
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(
-                ErrorResponse.of(ex.getMessage(), HttpStatus.UNAUTHORIZED)
+                ErrorResponse.of(ex.getMessage(), 401)
         );
     }
 
     @ExceptionHandler(BadCredentialsException.class)
     public ResponseEntity<?> handleBadCredentials(BadCredentialsException ex){
         return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(
-                ErrorResponse.of("Invalid username or password", HttpStatus.UNPROCESSABLE_ENTITY)
+                ErrorResponse.of("Invalid username or password", 422)
+        );
+    }
+
+
+    @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
+    public ResponseEntity<?> handleBadMethod(HttpRequestMethodNotSupportedException ex){
+        return ResponseEntity.status(HttpStatus.METHOD_NOT_ALLOWED).body(
+                ErrorResponse.of("Invalid Http Method Passed", 405)
+        );
+    }
+
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    public ResponseEntity<?> handleUnreadableMessage(HttpMessageNotReadableException ex){
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
+                ErrorResponse.of("Invalid Request Body Sent", 405)
         );
     }
 
     @ExceptionHandler(NoResourceFoundException.class)
-    public ResponseEntity<?> handleNotFound(NoResourceFoundException ex) {
-
+    public ResponseEntity<?> handleNotFound(NoResourceFoundException ex){
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
-                ErrorResponse.of("Endpoint not found", HttpStatus.NOT_FOUND)
+                ErrorResponse.of("The Requested route doesn't exist", 404)
         );
     }
 
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<?> handleGeneric(Exception ex){
-
+        System.out.println(ex.getClass());
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
-                ErrorResponse.of("Something went wrong", HttpStatus.INTERNAL_SERVER_ERROR)
+                ErrorResponse.of("Something went wrong", 500)
         );
     }
 }

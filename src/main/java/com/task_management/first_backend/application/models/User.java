@@ -40,6 +40,8 @@ public class User implements UserDetails {
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private UserSetting userSetting;
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Project> project;
     @CreationTimestamp
     private Date lastLoginAt;
     @CreationTimestamp

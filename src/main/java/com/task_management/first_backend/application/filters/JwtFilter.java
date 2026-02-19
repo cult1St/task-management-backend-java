@@ -9,6 +9,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
@@ -29,30 +30,39 @@ public class JwtFilter extends OncePerRequestFilter {
             HttpServletRequest request,
             HttpServletResponse response,
             FilterChain filterChain
-    ) throws ServletException, IOException {
-        final String authHeader = request.getHeader("Authorization");
+    ) {
+        try{
+            final String authHeader = request.getHeader("Authorization");
 
-        if(authHeader == null || !authHeader.startsWith("Bearer ")){
-            filterChain.doFilter(request, response);
-            return;
-        }
-
-        final String token = authHeader.substring(7);
-        final String username = jwtUtils.extractUsername(token);
-
-        if(username != null && SecurityContextHolder.getContext().getAuthentication() == null){
-            User user = userRepository.findByEmail(username);
-
-            if(user != null && jwtUtils.validateToken(token, username)){
-                CustomUserDetails userDetails = new CustomUserDetails(user);
-                UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(user, null, userDetails.getAuthorities());
-                authenticationToken.setDetails(
-                        new WebAuthenticationDetailsSource().buildDetails(request)
-                );
-                SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+            if(authHeader == null || !authHeader.startsWith("Bearer ")){
+                filterChain.doFilter(request, response);
+                return;
             }
 
+            final String token = authHeader.substring(7);
+            final String username = jwtUtils.extractUsername(token);
+
+            if(username != null && SecurityContextHolder.getContext().getAuthentication() == null){
+                User user = userRepository.findByEmail(username);
+
+                if(user != null && jwtUtils.validateToken(token, username)){
+                    CustomUserDetails userDetails = new CustomUserDetails(user);
+                    UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
+                            user,
+                            null,
+                            userDetails.getAuthorities()
+                    );
+                    authenticationToken.setDetails(
+                            new WebAuthenticationDetailsSource().buildDetails(request)
+                    );
+                    SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+                }
+
+            }
+            filterChain.doFilter(request, response);
+        }catch (Exception exception){
+            System.out.println(exception.getClass() + " cause: " + exception.getCause());
+            throw new BadCredentialsException("Invalid Auth Token Passed");
         }
-        filterChain.doFilter(request, response);
     }
 }
