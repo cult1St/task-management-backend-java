@@ -7,18 +7,19 @@ import com.task_management.first_backend.application.models.User;
 import com.task_management.first_backend.application.services.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/users/me")
+@RequestMapping("/api/v1/users")
 public class UserController {
 
     private final UserService userService;
 
-    @GetMapping
+    @GetMapping("/me")
     public ResponseEntity<SuccessResponse<UserResponseDTO>> me(
             @AuthenticationPrincipal User authUser
     ) {
@@ -29,7 +30,7 @@ public class UserController {
         );
     }
 
-    @PatchMapping
+    @PatchMapping("/me")
     public ResponseEntity<SuccessResponse<UserResponseDTO>> updateUser(
             @AuthenticationPrincipal User authUser,
             @Valid @RequestBody UpdateUserRequestDTO request
@@ -39,6 +40,21 @@ public class UserController {
 
         return ResponseEntity.ok(
                 SuccessResponse.of("User Details Updated Successfully", response)
+        );
+    }
+    @GetMapping("/search")
+    public ResponseEntity<SuccessResponse<Page<UserResponseDTO>>> searchUsers(
+            @AuthenticationPrincipal User authUser,
+            @RequestParam(name = "q") String query,
+            @RequestParam(name = "limit", defaultValue = "20") int size,
+            @RequestParam(name = "page", defaultValue = "1") int page
+    ){
+        //set correctly params
+        size = size > 0 ? size : 20;
+        page = page > 0 ? (page - 1) : 0;
+       Page<UserResponseDTO> response = userService.searchUsers(query, authUser, page, size);
+        return ResponseEntity.ok(
+                SuccessResponse.of("Users Searched Successfully", response)
         );
     }
 }

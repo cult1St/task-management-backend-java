@@ -1,5 +1,6 @@
 package com.task_management.first_backend.application.services;
 
+import com.task_management.first_backend.application.dto.UserResponseDTO;
 import com.task_management.first_backend.application.dto.auth.LoginRequestDTO;
 import com.task_management.first_backend.application.dto.users.UpdateUserRequestDTO;
 import com.task_management.first_backend.application.dto.users.UserSettingsRequestDTO;
@@ -11,6 +12,9 @@ import com.task_management.first_backend.application.repositories.UserRepository
 import com.task_management.first_backend.application.repositories.UserSettingRepository;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -176,6 +180,22 @@ public class UserService {
         userSettingRepository.save(userSetting);
 
         return request;
+    }
+
+    public Page<UserResponseDTO> searchUsers(String query, User user, int page, int size){
+        Pageable pageable = PageRequest.of(page, size);
+        query = query != null ? query : "";
+        return userRepository.findByIdNotAndFullNameContainingIgnoreCaseOrIdNotAndEmailContainingIgnoreCase(
+                user.getId(),
+                query,
+                user.getId(),
+                query,
+                pageable
+        ).map(this::mapToDto);
+    }
+
+    private UserResponseDTO mapToDto(User user){
+        return new UserResponseDTO(user);
     }
 
 

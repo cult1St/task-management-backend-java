@@ -11,6 +11,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
@@ -42,6 +43,11 @@ public class User implements UserDetails {
     private UserSetting userSetting;
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Project> project;
+
+    @OneToMany(mappedBy = "assignedBy", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ProjectUser> sentInvitations = new ArrayList<>();
+    @OneToMany(mappedBy = "assignedTo", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ProjectUser> receivedInvitations = new ArrayList<>();
     @CreationTimestamp
     private Date lastLoginAt;
     @CreationTimestamp
