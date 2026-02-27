@@ -42,7 +42,12 @@ public class SecurityConfig {
                 .cors(Customizer.withDefaults()) // ENABLE CORS
                 // Configure endpoint security
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/api/v1/auth/**").permitAll()  // allow all /auth/* endpoints
+                        .requestMatchers(
+                                "/api/v1/auth/**",
+                                "/swagger-ui/**",
+                                "/v3/api-docs/**",
+                                "/swagger-ui.html"
+                        ).permitAll()  // allow all /auth/* endpoints
                         .requestMatchers(HttpMethod.OPTIONS).permitAll() //allow all preflight endpoints
                         .anyRequest().authenticated()            // all other requests require auth
                 )

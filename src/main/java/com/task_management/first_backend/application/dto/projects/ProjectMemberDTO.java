@@ -9,7 +9,8 @@ import lombok.Data;
 @Data
 public class ProjectMemberDTO {
     private Long id;
-    private User user;
+    private String name;
+    private String email;
     private String role;
     private ProjectUserStatus status;
     private String requestedAt;
@@ -17,10 +18,13 @@ public class ProjectMemberDTO {
 
     public ProjectMemberDTO(ProjectUser projectUser){
         setId(projectUser.getId());
-        setUser(projectUser.getAssignedTo());
+        setName(projectUser.getAssignedTo().getFullName());
+        setName(projectUser.getAssignedTo().getEmail().substring(4) + "*****");
         setStatus(projectUser.getStatus());
         setRole(projectUser.getRole());
         setRequestedAt(DateHelper.formatDateToMD(projectUser.getCreatedAt()));
-        setAcceptedAt(DateHelper.formatDateToMD(projectUser.getAcceptedAt()));
+        if(projectUser.getAcceptedAt() != null){
+            setAcceptedAt(DateHelper.formatDateToMD(projectUser.getAcceptedAt()));
+        }
     }
 }

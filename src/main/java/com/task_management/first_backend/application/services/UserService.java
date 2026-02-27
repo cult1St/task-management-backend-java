@@ -1,7 +1,6 @@
 package com.task_management.first_backend.application.services;
 
 import com.task_management.first_backend.application.dto.UserResponseDTO;
-import com.task_management.first_backend.application.dto.auth.LoginRequestDTO;
 import com.task_management.first_backend.application.dto.users.UpdateUserRequestDTO;
 import com.task_management.first_backend.application.dto.users.UserSettingsRequestDTO;
 import com.task_management.first_backend.application.dto.users.settings.*;

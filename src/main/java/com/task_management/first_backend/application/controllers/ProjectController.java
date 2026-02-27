@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.task_management.first_backend.application.dto.SuccessResponse;
 import com.task_management.first_backend.application.dto.projects.ProjectDTO;
 import com.task_management.first_backend.application.dto.projects.ProjectMemberDTO;
+import com.task_management.first_backend.application.dto.projects.ProjectMemberInviteRequestDTO;
 import com.task_management.first_backend.application.dto.projects.ProjectRequestDTO;
 import com.task_management.first_backend.application.models.User;
 import com.task_management.first_backend.application.services.ProjectService;
@@ -73,6 +74,17 @@ public class ProjectController {
         Page<ProjectMemberDTO> response = projectService.getUserProjectMembers(authUser, projectId, status, page, size);
         return ResponseEntity.ok(
                 SuccessResponse.of("Project Members fetched successfully", response)
+        );
+    }
+    @PostMapping("/{projectId}/invitations")
+    public ResponseEntity<SuccessResponse<ProjectMemberDTO>> inviteMember(
+            @PathVariable Long projectId,
+            @AuthenticationPrincipal User authUser,
+            @Valid @RequestBody ProjectMemberInviteRequestDTO requestDTO
+    ){
+        ProjectMemberDTO projectMemberRequest = projectService.inviteMember(projectId, requestDTO, authUser);
+        return ResponseEntity.ok(
+                SuccessResponse.of("Invitation Request Sent Successfully", projectMemberRequest)
         );
     }
 }

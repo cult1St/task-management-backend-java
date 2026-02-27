@@ -31,11 +31,15 @@ public class Project {
     @Column(nullable = false)
     private Date dueDate;
     private int progress = 0;
+    //owning user
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
+    //project users linking
     @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ProjectUser> projectUsers = new ArrayList<>();
+    @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Task> tasks;
     @CreationTimestamp
     private Date createdAt;
     @UpdateTimestamp

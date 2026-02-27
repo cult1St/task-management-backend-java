@@ -39,15 +39,24 @@ public class User implements UserDetails {
     private String designatedRole;
     private String avatarUrl;
 
+    //user setting
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private UserSetting userSetting;
+    //project management
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Project> project;
 
+    //project users
     @OneToMany(mappedBy = "assignedBy", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ProjectUser> sentInvitations = new ArrayList<>();
     @OneToMany(mappedBy = "assignedTo", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ProjectUser> receivedInvitations = new ArrayList<>();
+    //tasks
+    @OneToMany(mappedBy = "assignedTo", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Task> assignedTasks;
+    @OneToMany(mappedBy = "createdBy", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Task> createdTasks;
+
     @CreationTimestamp
     private Date lastLoginAt;
     @CreationTimestamp

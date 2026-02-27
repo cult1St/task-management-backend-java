@@ -1,6 +1,8 @@
 package com.task_management.first_backend.application.exceptions;
 
 import com.task_management.first_backend.application.dto.ErrorResponse;
+import io.swagger.v3.oas.annotations.Hidden;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -18,6 +20,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@Hidden
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
@@ -82,10 +85,19 @@ public class GlobalExceptionHandler {
         );
     }
 
+    @ExceptionHandler(EntityNotFoundException.class)
+    public ResponseEntity<?> handleNotFound(EntityNotFoundException ex){
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+                ErrorResponse.of(ex.getMessage(), 404)
+        );
+    }
+
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<?> handleGeneric(Exception ex){
         System.out.println(ex.getClass());
+        ex.printStackTrace(); // prints full stack trace
+        System.out.println("Error message: " + ex.getMessage());
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
                 ErrorResponse.of("Something went wrong", 500)
         );
