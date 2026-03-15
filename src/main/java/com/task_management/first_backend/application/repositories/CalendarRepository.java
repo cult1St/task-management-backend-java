@@ -18,7 +18,7 @@ public interface CalendarRepository extends JpaRepository<CalendarEvent, Long> {
       AND e.date <= :endDate
       AND (
             LOWER(e.title) LIKE LOWER(CONCAT('%', :search, '%'))
-            OR LOWER(e.message) LIKE LOWER(CONCAT('%', :search, '%'))
+            OR LOWER(e.description) LIKE LOWER(CONCAT('%', :search, '%'))
           )
 """)
     Page<CalendarEvent> getEventsByParams(

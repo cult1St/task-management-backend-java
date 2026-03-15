@@ -23,7 +23,7 @@ public class CalendarDTO {
         setId(event.getId());
         setTitle(event.getTitle());
         setDescription(event.getDescription());
-        setDate(DateHelper.dateToLocale(event.getDate()));
+        setDate(event.getDate());
         setStartTime(event.getStartTime().toLocalTime());
         setEndTime(event.getEndTime().toLocalTime());
         setColor(event.getColour());
