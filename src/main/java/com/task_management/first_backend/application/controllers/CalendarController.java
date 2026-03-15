@@ -27,7 +27,7 @@ public class CalendarController {
             @AuthenticationPrincipal User authUser,
             @RequestParam String start,
             @RequestParam String end,
-            @RequestParam String search,
+            @RequestParam(name = "search", defaultValue = "") String search,
             @RequestParam(name = "limit", defaultValue = "20") int size,
             @RequestParam(name = "page", defaultValue = "1") int page
             ){
