@@ -2,6 +2,7 @@ package com.task_management.first_backend.application.controllers;
 
 import com.task_management.first_backend.application.dto.SuccessResponse;
 import com.task_management.first_backend.application.dto.invitations.InvitationDTO;
+import com.task_management.first_backend.application.dto.notifications.NotificationCountDTO;
 import com.task_management.first_backend.application.dto.notifications.NotificationDTO;
 import com.task_management.first_backend.application.models.User;
 import com.task_management.first_backend.application.services.NotificationService;
@@ -49,11 +50,13 @@ public class NotificationsController {
     }
 
     @GetMapping("unread-count")
-    public ResponseEntity<SuccessResponse<?>> getUnreadNotificationsCount(
+    public ResponseEntity<SuccessResponse<NotificationCountDTO>> getUnreadNotificationsCount(
             @AuthenticationPrincipal User authUser
     ){
         Long notificationsCount = notificationService.countUnreadNotifications(authUser);
-
-
+        NotificationCountDTO countDTO = new NotificationCountDTO(notificationsCount);
+        return ResponseEntity.ok(
+                SuccessResponse.of("Notifications Count Fetched Successfully", countDTO)
+        );
     }
 }
