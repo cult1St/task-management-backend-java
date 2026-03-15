@@ -5,6 +5,8 @@ import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 
@@ -27,10 +29,12 @@ public class CalendarEvent {
 
     private String description;
 
-    private Date date;
+    private String colour;
 
-    private Date rangeStart;
-    private Date rangeEnd;
+    private LocalDate date;
+
+    private LocalDateTime  startTime;
+    private LocalDateTime endTime;
 
     @CreationTimestamp
     private Date createdAt;

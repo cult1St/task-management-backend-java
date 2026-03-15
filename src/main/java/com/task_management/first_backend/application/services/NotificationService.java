@@ -2,6 +2,7 @@ package com.task_management.first_backend.application.services;
 
 
 import com.task_management.first_backend.application.dto.notifications.NotificationDTO;
+import com.task_management.first_backend.application.enums.NotificationType;
 import com.task_management.first_backend.application.models.Notification;
 import com.task_management.first_backend.application.models.User;
 import com.task_management.first_backend.application.repositories.NotificationRepository;
@@ -63,6 +64,26 @@ public class NotificationService {
     public boolean markAllAsRead(User user){
         repository.markAllAsRead(user);
         return true;
+    }
+
+
+    //static service to create notification
+    public static NotificationDTO createNotification(
+            User user,
+            String title,
+            String message,
+            NotificationType type,
+            User actor
+    ){
+        Notification notification = Notification.builder()
+                .user(user)
+                .title(title)
+                .message(message)
+                .type(type)
+                .actor(actor)
+                .build();
+
+        return new NotificationDTO(notification);
     }
 
     protected NotificationDTO mapToDTO(Notification notification){

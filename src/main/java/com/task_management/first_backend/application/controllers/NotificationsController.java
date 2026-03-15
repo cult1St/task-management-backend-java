@@ -10,10 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Objects;
 
@@ -57,6 +54,27 @@ public class NotificationsController {
         NotificationCountDTO countDTO = new NotificationCountDTO(notificationsCount);
         return ResponseEntity.ok(
                 SuccessResponse.of("Notifications Count Fetched Successfully", countDTO)
+        );
+    }
+
+    @PatchMapping("/{id}/read")
+    public ResponseEntity<SuccessResponse<NotificationDTO>> readNotification(
+            @AuthenticationPrincipal User authUser,
+            @PathVariable Long id
+    ){
+        NotificationDTO notification = notificationService.readNotification(id);
+        return ResponseEntity.ok(
+                SuccessResponse.of("Notification Read Successfully", notification)
+        );
+    }
+
+    @PatchMapping("/read-all")
+    public ResponseEntity<SuccessResponse<Boolean>> readAllNotifications(
+            @AuthenticationPrincipal User authUser
+    ){
+        Boolean response = notificationService.markAllAsRead(authUser);
+        return ResponseEntity.ok(
+                SuccessResponse.of("Notification Read Successfully", response)
         );
     }
 }

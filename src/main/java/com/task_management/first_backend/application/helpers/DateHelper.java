@@ -12,4 +12,16 @@ public class DateHelper {
                 .toLocalDate();
         return localDate.format(DateTimeFormatter.ofPattern("MMM d"));
     }
+    public static LocalDate dateToLocale(Date date){
+        return date.toInstant()
+                .atZone(ZoneId.systemDefault())
+                .toLocalDate();
+    }
+
+    public static String formatDate(Date date, String format){
+        LocalDate localDate = date.toInstant()
+                .atZone(ZoneId.systemDefault())
+                .toLocalDate();
+        return localDate.format(DateTimeFormatter.ofPattern(format));
+    }
 }

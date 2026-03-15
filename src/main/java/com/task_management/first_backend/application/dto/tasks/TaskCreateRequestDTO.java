@@ -2,6 +2,7 @@ package com.task_management.first_backend.application.dto.tasks;
 
 import com.task_management.first_backend.application.enums.TaskPriority;
 import com.task_management.first_backend.application.enums.TaskStatus;
+import jakarta.validation.constraints.Future;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
@@ -25,6 +26,7 @@ public class TaskCreateRequestDTO {
     private Long projectId;
 
     private Long assignedToId; // optional
-
+    @NotNull
+    @Future
     private Date dueDate; // optional depending on business rules
 }

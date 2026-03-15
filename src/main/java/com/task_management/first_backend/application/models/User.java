@@ -57,6 +57,12 @@ public class User implements UserDetails {
     @OneToMany(mappedBy = "createdBy", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Task> createdTasks;
 
+    //notifications
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Notification> notifications;
+    @OneToMany(mappedBy = "actor", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Notification> sentNotifications;
+
     @CreationTimestamp
     private Date lastLoginAt;
     @CreationTimestamp
