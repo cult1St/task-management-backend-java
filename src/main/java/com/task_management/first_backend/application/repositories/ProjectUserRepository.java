@@ -14,4 +14,6 @@ public interface ProjectUserRepository extends JpaRepository<ProjectUser, Long> 
      Page<ProjectUser> findByAssignedTo(User assignedTo, Pageable pageable);
      Page<ProjectUser> findByProjectIdAndStatus(Long projectId, ProjectUserStatus status, Pageable pageable);
      Page<ProjectUser> findByProjectIdAndStatusAndAssignedBy(Long projectId, ProjectUserStatus status, User assignedBy, Pageable pageable);
+
+     ProjectUser findByProjectIdAndAssignedTo(Long projectId, User assignedTo);
 }

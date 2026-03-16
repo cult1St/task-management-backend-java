@@ -21,6 +21,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -209,6 +210,26 @@ public class ProjectService {
 
     }
 
+    public Boolean deleteMember(Long projectId, Long userId, User actor){
+        /// check if project exists
+        Project project = projectRepository.findById(projectId)
+                .orElseThrow(() -> new EntityNotFoundException("Project does not exist"));
+        //check for admin access
+        if(!Objects.equals(project.getUser().getId(), actor.getId())){
+            throw new AccessDeniedException("You do not have access to delete this resource");
+        }
+        //check if recipient exist
+        User recipient = userRepository.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException("User does not exist"));
+        //check if assigned to the project
+        ProjectUser projectMember = projectUserRepository.findByProjectIdAndAssignedTo(projectId, recipient);
+        if(projectMember == null){
+            throw new EntityNotFoundException("User does not belong to this project");
+        }
+        projectUserRepository.delete(projectMember);
+        return true;
+    }
+
     private ProjectMemberDTO mapMemberToDto(ProjectUser projectUser){
         return new ProjectMemberDTO(
                 projectUser
@@ -219,7 +240,6 @@ public class ProjectService {
                 projectUser
         );
     }
-
 
 
 

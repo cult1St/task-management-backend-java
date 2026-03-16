@@ -87,4 +87,13 @@ public class ProjectController {
                 SuccessResponse.of("Invitation Request Sent Successfully", projectMemberRequest)
         );
     }
+
+    @DeleteMapping("/{projectId}/members/{userId}")
+    public ResponseEntity<?> deleteMember(
+            @AuthenticationPrincipal User authUser,
+            @PathVariable Long projectId,
+            @PathVariable Long userId
+    ){
+
+    }
 }
