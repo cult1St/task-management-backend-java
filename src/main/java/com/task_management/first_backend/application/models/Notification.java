@@ -1,5 +1,6 @@
 package com.task_management.first_backend.application.models;
 
+import com.task_management.first_backend.application.enums.NotificationStatus;
 import com.task_management.first_backend.application.enums.NotificationType;
 import jakarta.persistence.*;
 import lombok.*;
@@ -35,7 +36,11 @@ public class Notification {
 
     private boolean isRead = false;
 
+    @Enumerated(EnumType.STRING)
     private NotificationType type = NotificationType.OTHERS;
+
+    @Enumerated(EnumType.STRING)
+    private NotificationStatus status = NotificationStatus.PENDING;
     private Date readAt;
 
     @CreationTimestamp

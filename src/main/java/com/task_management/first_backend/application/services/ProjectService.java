@@ -7,6 +7,7 @@ import com.task_management.first_backend.application.dto.projects.ProjectMemberD
 import com.task_management.first_backend.application.dto.projects.ProjectMemberInviteRequestDTO;
 import com.task_management.first_backend.application.dto.projects.ProjectRequestDTO;
 import com.task_management.first_backend.application.enums.InvitationResponse;
+import com.task_management.first_backend.application.enums.NotificationType;
 import com.task_management.first_backend.application.enums.ProjectStatus;
 import com.task_management.first_backend.application.enums.ProjectUserStatus;
 import com.task_management.first_backend.application.models.Project;
@@ -16,6 +17,7 @@ import com.task_management.first_backend.application.repositories.ProjectReposit
 import com.task_management.first_backend.application.repositories.ProjectUserRepository;
 import com.task_management.first_backend.application.repositories.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -27,15 +29,19 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class ProjectService {
     private final ProjectRepository projectRepository;
     private final ProjectUserRepository projectUserRepository;
     private final UserRepository userRepository;
+
+    private final NotificationService notificationService;
 
     public Page<ProjectDTO> getUserProjects(Long userId, String status, int page, int size) {
 
@@ -176,6 +182,15 @@ public class ProjectService {
                 .assignedTo(assignee)
                 .build();
         ProjectUser createdRequest = projectUserRepository.save(newRequest);
+
+        //create the notification
+        notificationService.createNotification(
+                assignee,
+                "Project Invitation Request",
+                "An invitation request has been sent to you on the project " + project.getName() + " please check the invitations page and accept or decline invitation",
+                NotificationType.INVITATION_REQUEST,
+                user
+        );
         return new ProjectMemberDTO(createdRequest);
     }
 
@@ -200,12 +215,23 @@ public class ProjectService {
         ProjectUser projectUser = projectUserRepository
                 .findById(invitationId)
                 .orElseThrow(() -> new EntityNotFoundException("Invitation Request Not found"));
+        String message;
         if (requestDTO.getAction() == InvitationResponse.ACCEPT){
             projectUser.setStatus(ProjectUserStatus.ACCEPTED);
+            projectUser.setAcceptedAt(new Date());
+            message = "Invitation request has been accepted. you can now assign tasks on this project to this user";
         }else{
             projectUser.setStatus(ProjectUserStatus.REJECTED);
+            message = "Invitation request has been rejected.";
         }
         projectUserRepository.save(projectUser);
+        notificationService.createNotification(
+                projectUser.getAssignedBy(),
+                "Project Invitation Response",
+                message,
+                NotificationType.INVITATION_RESPONSE,
+                user
+        );
         return new InvitationDTO(projectUser);
 
     }

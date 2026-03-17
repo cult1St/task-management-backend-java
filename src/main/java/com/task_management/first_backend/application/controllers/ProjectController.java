@@ -89,11 +89,14 @@ public class ProjectController {
     }
 
     @DeleteMapping("/{projectId}/members/{userId}")
-    public ResponseEntity<?> deleteMember(
+    public ResponseEntity<SuccessResponse<Boolean>> deleteMember(
             @AuthenticationPrincipal User authUser,
             @PathVariable Long projectId,
             @PathVariable Long userId
     ){
-
+        Boolean deleteMember = projectService.deleteMember(projectId, userId, authUser);
+        return  ResponseEntity.ok(
+                SuccessResponse.of("Member deleted From Project Successfully", deleteMember)
+        );
     }
 }

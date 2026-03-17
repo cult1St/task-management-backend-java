@@ -4,6 +4,7 @@ import com.task_management.first_backend.application.dto.tasks.TaskCreateRequest
 import com.task_management.first_backend.application.dto.tasks.TaskDTO;
 import com.task_management.first_backend.application.dto.tasks.TaskUpdateRequestDTO;
 import com.task_management.first_backend.application.dto.tasks.TaskUpdateStatusRequestDTO;
+import com.task_management.first_backend.application.enums.NotificationType;
 import com.task_management.first_backend.application.enums.TaskPriority;
 import com.task_management.first_backend.application.enums.TaskStatus;
 import com.task_management.first_backend.application.models.Project;
@@ -23,13 +24,17 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Date;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class TaskService {
     private final TaskRepository repository;
     private final UserRepository userRepository;
     private final ProjectRepository projectRepository;
+
+    private final NotificationService notificationService;
     public Page<TaskDTO> getAllUsersTask(User user, int page, int limit){
         Pageable pageable = PageRequest.of(page, limit);
         return repository.findByCreatedByIdOrAssignedToId(user.getId(), user.getId(), pageable)
@@ -41,7 +46,6 @@ public class TaskService {
         );
     }
 
-    @Transactional
     public TaskDTO createTask(TaskCreateRequestDTO request, User user) {
 
         Long assignedToId = request.getAssignedToId() != null
@@ -72,6 +76,13 @@ public class TaskService {
                 .build();
 
         Task savedTask = repository.save(task);
+        notificationService.createNotification(
+                assignedTo,
+                "Task Assignment - " + savedTask.getTitle(),
+                "A new task has been assigned to you, check the tasks page for more details",
+                NotificationType.TASK_ASSIGNMENT,
+                user
+        );
 
         return new TaskDTO(savedTask);
     }
@@ -116,7 +127,17 @@ public class TaskService {
         if (request.getAssignedToId() != null) {
             User assignedTo = userRepository.findById(request.getAssignedToId())
                     .orElseThrow(() -> new EntityNotFoundException("Assigned user not found"));
+            if(!Objects.equals(request.getAssignedToId(), task.getAssignedTo().getId())){
+                notificationService.createNotification(
+                        assignedTo,
+                        "Task Assignment - " + task.getTitle(),
+                        "A new task has been assigned to you, check the tasks page for more details",
+                        NotificationType.TASK_ASSIGNMENT,
+                        currentUser
+                );
+            }
             task.setAssignedTo(assignedTo);
+
         }
 
         // Update project

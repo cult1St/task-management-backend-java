@@ -57,7 +57,7 @@ public class NotificationService {
     }
 
     public Long countUnreadNotifications(User user){
-        return repository.countByUser(user);
+        return repository.countByUserAndIsRead(user, false);
     }
 
 
@@ -68,7 +68,7 @@ public class NotificationService {
 
 
     //static service to create notification
-    public static NotificationDTO createNotification(
+    public NotificationDTO createNotification(
             User user,
             String title,
             String message,
@@ -82,6 +82,8 @@ public class NotificationService {
                 .type(type)
                 .actor(actor)
                 .build();
+
+        repository.save(notification);
 
         return new NotificationDTO(notification);
     }
