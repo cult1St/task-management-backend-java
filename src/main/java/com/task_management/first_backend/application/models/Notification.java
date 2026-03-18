@@ -39,8 +39,7 @@ public class Notification {
     @Enumerated(EnumType.STRING)
     private NotificationType type = NotificationType.OTHERS;
 
-    @Enumerated(EnumType.STRING)
-    private NotificationStatus status = NotificationStatus.PENDING;
+    private boolean isDispatched = false;
     private Date readAt;
 
     @CreationTimestamp

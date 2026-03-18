@@ -2,23 +2,28 @@ package com.task_management.first_backend.application.services;
 
 
 import com.task_management.first_backend.application.dto.notifications.NotificationDTO;
+import com.task_management.first_backend.application.dto.notifications.NotificationDispatchDTO;
 import com.task_management.first_backend.application.enums.NotificationType;
 import com.task_management.first_backend.application.models.Notification;
 import com.task_management.first_backend.application.models.User;
 import com.task_management.first_backend.application.repositories.NotificationRepository;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.List;
 
 @RequiredArgsConstructor
 @Service
 public class NotificationService {
     private final NotificationRepository repository;
+    private final SimpMessagingTemplate messagingTemplate;
 
     public Page<NotificationDTO> getUserNotifications(User user, String type, int page, int limit){
         Pageable pageable = PageRequest.of(page, limit);
@@ -92,4 +97,20 @@ public class NotificationService {
         return new NotificationDTO(notification);
     }
 
+    @Transactional
+    public void processNotificationsSending(){
+        Pageable pageable = PageRequest.of(0, 100);
+        List<Notification> pendingNotifications = repository.getNonDispatchedNotifications(pageable);
+        for(Notification notification: pendingNotifications){
+            NotificationDispatchDTO dispatchDTO = new NotificationDispatchDTO(notification);
+            messagingTemplate.convertAndSendToUser(
+                    notification.getUser().getId().toString(),
+                    "/queue/notifications",
+                    dispatchDTO
+            );
+
+            notification.setDispatched(true);
+        }
+        repository.saveAll(pendingNotifications);
+    }
 }

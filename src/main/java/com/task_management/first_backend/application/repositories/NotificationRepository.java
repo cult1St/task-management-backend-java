@@ -10,6 +10,9 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.time.LocalDate;
+import java.util.List;
+
 public interface NotificationRepository extends JpaRepository<Notification, Long> {
     Page<Notification> findByUser(User user, Pageable pageable);
     Page<Notification> findByUserAndIsRead(User user, boolean isRead, Pageable pageable);
@@ -20,4 +23,11 @@ public interface NotificationRepository extends JpaRepository<Notification, Long
     @Transactional
     @Query("UPDATE Notification n SET n.isRead = true, n.readAt = CURRENT_TIMESTAMP WHERE n.user = :user")
     void markAllAsRead( @Param("user") User user);
+
+    @Query("""
+        SELECT n
+        FROM Notification n
+        WHERE n.isDispatched = false
+    """)
+    List<Notification> getNonDispatchedNotifications(Pageable pageable);
 }
