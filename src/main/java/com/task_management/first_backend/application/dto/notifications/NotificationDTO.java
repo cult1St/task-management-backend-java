@@ -6,6 +6,7 @@ import lombok.Data;
 
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.util.Date;
 
 @Data
 public class NotificationDTO {
@@ -15,7 +16,7 @@ public class NotificationDTO {
     private String message;
     private NotificationType type;
     private boolean read;
-    private LocalDate createdAt;
+    private Date createdAt;
     private String actorName;
 
     public NotificationDTO(Notification notification){
@@ -23,7 +24,9 @@ public class NotificationDTO {
         setTitle(notification.getTitle());
         setMessage(notification.getMessage());
         setRead(notification.isRead());
-        setCreatedAt(notification.getCreatedAt().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
+        if(notification.getCreatedAt() != null ){
+            setCreatedAt(notification.getCreatedAt());
+        }
         setActorName(notification.getUser().getFullName());
     }
 }

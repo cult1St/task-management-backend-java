@@ -43,7 +43,7 @@ public class ProjectController {
     public ResponseEntity<SuccessResponse<ProjectDTO>> createProject(
             @Valid @RequestBody ProjectRequestDTO request,
             @AuthenticationPrincipal User authUser
-            ){
+    ){
         ProjectDTO response = projectService.createUserProject(authUser, request);
         return ResponseEntity.ok(
                 SuccessResponse.of("Project Created Successfully", response)
@@ -95,8 +95,8 @@ public class ProjectController {
             @PathVariable Long userId
     ){
         Boolean deleteMember = projectService.deleteMember(projectId, userId, authUser);
-        return ResponseEntity.ok(
-                SuccessResponse.of("Project Member deleted Successfully", deleteMember)
+        return  ResponseEntity.ok(
+                SuccessResponse.of("Member deleted From Project Successfully", deleteMember)
         );
     }
 }

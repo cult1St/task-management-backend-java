@@ -11,6 +11,7 @@ public class ProjectMemberDTO {
     private Long id;
     private String name;
     private String email;
+    private Long userId;
     private String role;
     private ProjectUserStatus status;
     private String requestedAt;
@@ -18,8 +19,10 @@ public class ProjectMemberDTO {
 
     public ProjectMemberDTO(ProjectUser projectUser){
         setId(projectUser.getId());
+        setUserId(projectUser.getAssignedTo().getId());
         setName(projectUser.getAssignedTo().getFullName());
-        setName(projectUser.getAssignedTo().getEmail().substring(4) + "*****");
+        String userEmail = projectUser.getAssignedTo().getEmail();
+        setEmail( userEmail.substring(0, 3) + "*****" + userEmail.substring(6));
         setStatus(projectUser.getStatus());
         setRole(projectUser.getRole());
         setRequestedAt(DateHelper.formatDateToMD(projectUser.getCreatedAt()));

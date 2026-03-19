@@ -9,6 +9,7 @@ import com.task_management.first_backend.application.services.NotificationServic
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -76,5 +77,9 @@ public class NotificationsController {
         return ResponseEntity.ok(
                 SuccessResponse.of("Notification Read Successfully", response)
         );
+    }
+
+    public void sendNotifications(){
+
     }
 }
