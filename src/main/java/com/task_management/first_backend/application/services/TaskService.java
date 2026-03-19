@@ -23,6 +23,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
@@ -184,9 +186,24 @@ public class TaskService {
         return new TaskDTO(updatedTask);
     }
 
-    public long getExpiringTasksCount(){
-
+    public long getExpiringTasksCount(LocalDateTime startDate, LocalDateTime endDate){
+        return repository.getTasksCountWithinDateRange(startDate, endDate);
     }
-    public List<TaskDTO> getExpiringTasks()
+    public List<TaskDTO> getExpiringTasks(
+            LocalDateTime startDate,
+            LocalDateTime endDate,
+            int page,
+            int size
+    ){
+        Pageable pageable = PageRequest.of(page, size);
+        List<Task> tasks = repository.getTasksWithinDateRange(startDate, endDate, pageable);
+        List<TaskDTO> taskDTOS = new ArrayList<>();
+        for(Task task : tasks){
+            taskDTOS.add(
+                    new TaskDTO(task)
+            );
+        }
+        return taskDTOS;
+    }
 
 }

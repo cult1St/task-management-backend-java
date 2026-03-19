@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 
@@ -28,8 +29,8 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
             AND t.dueDate <= :endDate
             """)
     List<Task> getTasksWithinDateRange(
-            @Param("startDate") Date startDate,
-            @Param("endDate") Date endDate,
+            @Param("startDate") LocalDateTime startDate,
+            @Param("endDate") LocalDateTime endDate,
             Pageable pageable
     );
 
@@ -40,7 +41,7 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
             AND t.dueDate <= :endDate
             """)
     long getTasksCountWithinDateRange(
-            @Param("startDate") Date startDate,
-            @Param("endDate") Date endDate
+            @Param("startDate") LocalDateTime startDate,
+            @Param("endDate") LocalDateTime endDate
     );
 }
