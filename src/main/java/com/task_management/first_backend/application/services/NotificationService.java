@@ -16,6 +16,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 
@@ -86,11 +88,17 @@ public class NotificationService {
                 .message(message)
                 .type(type)
                 .actor(actor)
+                .lastNotifiedAt(LocalDateTime.now())
                 .build();
 
         repository.save(notification);
 
         return new NotificationDTO(notification);
+    }
+
+    public boolean checkForPrevSent(User user, NotificationType type, LocalDate date){
+        Notification notification = repository.findByUserAndTypeAndLastNotifiedAt(user, type, date);
+        return notification != null;
     }
 
     protected NotificationDTO mapToDTO(Notification notification){

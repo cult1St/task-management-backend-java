@@ -1,5 +1,6 @@
 package com.task_management.first_backend.application.repositories;
 
+import com.task_management.first_backend.application.enums.NotificationType;
 import com.task_management.first_backend.application.models.Notification;
 import com.task_management.first_backend.application.models.User;
 import jakarta.transaction.Transactional;
@@ -30,4 +31,6 @@ public interface NotificationRepository extends JpaRepository<Notification, Long
         WHERE n.isDispatched = false
     """)
     List<Notification> getNonDispatchedNotifications(Pageable pageable);
+
+    Notification findByUserAndTypeAndLastNotifiedAt(User user, NotificationType type, LocalDate date);
 }

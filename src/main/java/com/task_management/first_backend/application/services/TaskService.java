@@ -189,21 +189,20 @@ public class TaskService {
     public long getExpiringTasksCount(LocalDateTime startDate, LocalDateTime endDate){
         return repository.getTasksCountWithinDateRange(startDate, endDate);
     }
-    public List<TaskDTO> getExpiringTasks(
+    public Page<Task> getExpiringTasks(
             LocalDateTime startDate,
             LocalDateTime endDate,
             int page,
             int size
     ){
         Pageable pageable = PageRequest.of(page, size);
-        List<Task> tasks = repository.getTasksWithinDateRange(startDate, endDate, pageable);
-        List<TaskDTO> taskDTOS = new ArrayList<>();
-        for(Task task : tasks){
-            taskDTOS.add(
-                    new TaskDTO(task)
-            );
-        }
-        return taskDTOS;
+        return repository.getTasksWithinDateRange(startDate, endDate, pageable);
+
+    }
+
+    public Page<Task> getOverdueTasks(LocalDateTime end, int page, int size){
+        Pageable pageable = PageRequest.of(page, size);
+        return repository.getTasksAfterDate(end, pageable);
     }
 
 }

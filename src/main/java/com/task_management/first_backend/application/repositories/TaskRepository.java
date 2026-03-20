@@ -28,9 +28,19 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
             WHERE t.dueDate >= :startDate
             AND t.dueDate <= :endDate
             """)
-    List<Task> getTasksWithinDateRange(
+    Page<Task> getTasksWithinDateRange(
             @Param("startDate") LocalDateTime startDate,
             @Param("endDate") LocalDateTime endDate,
+            Pageable pageable
+    );
+
+    @Query("""
+            SELECT t
+            FROM Task t
+            WHERE t.dueDate >= :date
+            """)
+    Page<Task> getTasksAfterDate(
+            @Param("date") LocalDateTime dateTime,
             Pageable pageable
     );
 

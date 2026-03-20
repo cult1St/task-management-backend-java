@@ -7,6 +7,7 @@ import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 
@@ -41,6 +42,8 @@ public class Notification {
 
     private boolean isDispatched = false;
     private Date readAt;
+
+    private LocalDateTime lastNotifiedAt;
 
     @CreationTimestamp
     private Date createdAt;
