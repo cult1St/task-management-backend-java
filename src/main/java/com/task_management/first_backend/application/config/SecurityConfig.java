@@ -46,7 +46,9 @@ public class SecurityConfig {
                                 "/api/v1/auth/**",
                                 "/swagger-ui/**",
                                 "/v3/api-docs/**",
-                                "/swagger-ui.html"
+                                "/swagger-ui.html",
+                                "/ws",
+                                "/ws/**"
                         ).permitAll()  // allow all /auth/* endpoints
                         .requestMatchers(HttpMethod.OPTIONS).permitAll() //allow all preflight endpoints
                         .anyRequest().authenticated()            // all other requests require auth

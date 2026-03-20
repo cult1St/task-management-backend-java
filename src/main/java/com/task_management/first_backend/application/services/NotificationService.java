@@ -112,7 +112,7 @@ public class NotificationService {
         for(Notification notification: pendingNotifications){
             NotificationDispatchDTO dispatchDTO = new NotificationDispatchDTO(notification);
             messagingTemplate.convertAndSendToUser(
-                    notification.getUser().getId().toString(),
+                    notification.getUser().getUsername(),
                     "/queue/notifications",
                     dispatchDTO
             );
