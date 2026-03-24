@@ -1,8 +1,13 @@
 package com.task_management.first_backend.application.utils;
 
+import com.task_management.first_backend.application.models.User;
+import com.task_management.first_backend.application.repositories.UserRepository;
+import com.task_management.first_backend.application.services.UserService;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -13,6 +18,9 @@ import java.util.Date;
 public class JwtUtils {
     private final Key key;
     private final long expiration; // 3 hours
+    @Autowired
+    private UserRepository userRepository;
+
 
     public JwtUtils(@Value("${jwt.secret}") String secret, @Value("${jwt.expiration}") long expiration){
         this.expiration = expiration;
@@ -34,6 +42,11 @@ public class JwtUtils {
                 .parseClaimsJws(token)
                 .getBody()
                 .getSubject();
+    }
+
+    public User getUserFromToken(String token){
+        String username = extractUsername(token);
+        return userRepository.findByEmail(username);
     }
 
     public boolean validateToken(String token, String username){

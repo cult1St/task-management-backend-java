@@ -7,6 +7,7 @@ import com.task_management.first_backend.application.dto.tasks.TaskUpdateStatusR
 import com.task_management.first_backend.application.enums.NotificationType;
 import com.task_management.first_backend.application.enums.TaskPriority;
 import com.task_management.first_backend.application.enums.TaskStatus;
+import com.task_management.first_backend.application.helpers.DateHelper;
 import com.task_management.first_backend.application.models.Project;
 import com.task_management.first_backend.application.models.Task;
 import com.task_management.first_backend.application.models.User;
@@ -74,7 +75,7 @@ public class TaskService {
                 .assignedTo(assignedTo)
                 .createdBy(user)
                 .dueDate(request.getDueDate() != null
-                        ? request.getDueDate()
+                        ? DateHelper.dateToLocaleDateTime(request.getDueDate())
                         : null)
                 .build();
 
@@ -123,7 +124,7 @@ public class TaskService {
 
         // Update due date
         if (request.getDueDate() != null) {
-            task.setDueDate(request.getDueDate());
+            task.setDueDate(DateHelper.dateToLocaleDateTime(request.getDueDate()));
         }
 
         // Update assigned user

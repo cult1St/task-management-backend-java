@@ -1,7 +1,6 @@
 package com.task_management.first_backend.application.crons;
 
 import com.task_management.first_backend.application.enums.NotificationType;
-import com.task_management.first_backend.application.helpers.DateHelper;
 import com.task_management.first_backend.application.models.Task;
 import com.task_management.first_backend.application.models.User;
 import com.task_management.first_backend.application.services.NotificationService;
@@ -15,7 +14,6 @@ import org.springframework.scheduling.annotation.Scheduled;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Date;
 
 @Configuration
 @RequiredArgsConstructor
@@ -25,13 +23,18 @@ public class CreateReminderNotifications {
     private final TaskService taskService;
     private final NotificationService notificationService;
 
-    // Run every hour (more accurate than once daily)
-    @Scheduled(cron = "0 0 * * * *")
+    @Scheduled(fixedRate = 3600000) //  every 1 hour
     public void runReminderJob() {
-        log.info("Starting reminder job...");
-        processApproachingDeadlines();
-        processOverdueTasks();
-        log.info("Reminder job completed.");
+        log.info("========== REMINDER JOB START ==========");
+
+        try {
+            processApproachingDeadlines();
+            // processOverdueTasks();
+        } catch (Exception e) {
+            log.error("Error in reminder job", e);
+        }
+
+        log.info("========== REMINDER JOB END ==========");
     }
 
     // ================= APPROACHING TASKS =================
@@ -45,7 +48,6 @@ public class CreateReminderNotifications {
     // ================= OVERDUE TASKS =================
     private void processOverdueTasks() {
         LocalDateTime now = LocalDateTime.now();
-
         processTasksInPages(null, now, false);
     }
 
@@ -59,7 +61,7 @@ public class CreateReminderNotifications {
         do {
             taskPage = isApproaching
                     ? taskService.getExpiringTasks(start, end, page, size)
-                    : taskService.getOverdueTasks(end, page, size); // you need this method
+                    : taskService.getOverdueTasks(end, page, size);
 
             for (Task task : taskPage.getContent()) {
                 createTaskNotification(isApproaching, task, LocalDateTime.now());
@@ -72,19 +74,15 @@ public class CreateReminderNotifications {
     // ================= NOTIFICATION CREATION =================
     private void createTaskNotification(boolean isApproaching, Task task, LocalDateTime currentTime) {
 
-
         User user = task.getAssignedTo();
         if (user == null) {
-            log.warn("Task {} has no assigned user", task.getId());
             return;
         }
 
-        String title;
-        String description;
-
-        /// check if notification has been sent today
         LocalDate today = LocalDate.now();
 
+        String title;
+        String description;
 
         if (isApproaching) {
             title = "Task Approaching Deadline";
@@ -96,7 +94,8 @@ public class CreateReminderNotifications {
                     task.getTitle(),
                     timeLeft
             );
-            if(notificationService.checkForPrevSent(user, NotificationType.TASK_DEADLINE, today)){
+
+            if (notificationService.checkForPrevSent(user, NotificationType.TASK_DEADLINE, today)) {
                 return;
             }
 
@@ -119,9 +118,10 @@ public class CreateReminderNotifications {
                     timeOverdue
             );
 
-            if(notificationService.checkForPrevSent(user, NotificationType.TASK_EXPIRED, today)){
+            if (notificationService.checkForPrevSent(user, NotificationType.TASK_EXPIRED, today)) {
                 return;
             }
+
             notificationService.createNotification(
                     user,
                     title,
@@ -133,8 +133,7 @@ public class CreateReminderNotifications {
     }
 
     // ================= TIME HELPERS =================
-    private String getApproachingTaskTimeMessage(Date dueDate, LocalDateTime currentDate) {
-        LocalDateTime dueDateTime = DateHelper.dateToLocale(dueDate).atStartOfDay();
+    private String getApproachingTaskTimeMessage(LocalDateTime dueDateTime, LocalDateTime currentDate) {
 
         if (currentDate.isAfter(dueDateTime)) {
             return "deadline has already passed";
@@ -154,8 +153,7 @@ public class CreateReminderNotifications {
         return daysLeft + (daysLeft == 1 ? " day left" : " days left");
     }
 
-    private String getOverdueTaskTimeMessage(Date dueDate, LocalDateTime currentDate) {
-        LocalDateTime dueDateTime = DateHelper.dateToLocale(dueDate).atStartOfDay();
+    private String getOverdueTaskTimeMessage(LocalDateTime dueDateTime, LocalDateTime currentDate) {
 
         if (dueDateTime.isAfter(currentDate)) {
             return "not yet due";

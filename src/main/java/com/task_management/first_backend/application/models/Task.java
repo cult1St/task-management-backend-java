@@ -7,6 +7,7 @@ import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Entity
@@ -39,7 +40,7 @@ public class Task {
     @JoinColumn(name = "assigned_to")
     private User assignedTo;
     @Column(nullable = false)
-    private Date dueDate;
+    private LocalDateTime dueDate;
     @CreationTimestamp
     private Date createdAt;
     @UpdateTimestamp

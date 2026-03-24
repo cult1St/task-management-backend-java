@@ -1,6 +1,7 @@
 package com.task_management.first_backend.application.helpers;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
@@ -23,5 +24,9 @@ public class DateHelper {
                 .atZone(ZoneId.systemDefault())
                 .toLocalDate();
         return localDate.format(DateTimeFormatter.ofPattern(format));
+    }
+
+    public static LocalDateTime dateToLocaleDateTime(Date date){
+        return date.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
     }
 }

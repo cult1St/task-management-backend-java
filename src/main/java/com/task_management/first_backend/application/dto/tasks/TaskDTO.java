@@ -5,6 +5,8 @@ import com.task_management.first_backend.application.enums.TaskStatus;
 import com.task_management.first_backend.application.models.Task;
 import lombok.Data;
 import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.Date;
 
 @Data
@@ -61,7 +63,7 @@ public class TaskDTO {
         }
 
         // Date conversion
-        this.dueDate = convertToInstant(task.getDueDate());
+        this.dueDate = task.getDueDate().toInstant(ZoneOffset.UTC);
         this.createdAt = convertToInstant(task.getCreatedAt());
         this.updatedAt = convertToInstant(task.getUpdatedAt());
 
@@ -76,6 +78,6 @@ public class TaskDTO {
     private boolean isTaskExpired(Task task) {
         if (task.getDueDate() == null) return false;
         if (task.getStatus() == TaskStatus.DONE) return false;
-        return task.getDueDate().before(new Date());
+        return task.getDueDate().isBefore(LocalDateTime.now());
     }
 }

@@ -15,6 +15,7 @@ public class NotificationDTO {
     private String title;
     private String message;
     private NotificationType type;
+    private Long userId;
     private boolean read;
     private Date createdAt;
     private String actorName;
@@ -22,6 +23,7 @@ public class NotificationDTO {
     public NotificationDTO(Notification notification){
         setId(notification.getId());
         setTitle(notification.getTitle());
+        setUserId(notification.getUser().getId());
         setMessage(notification.getMessage());
         setRead(notification.isRead());
         if(notification.getCreatedAt() != null ){

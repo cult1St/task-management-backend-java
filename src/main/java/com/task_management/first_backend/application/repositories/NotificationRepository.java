@@ -12,6 +12,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 public interface NotificationRepository extends JpaRepository<Notification, Long> {
@@ -32,5 +33,27 @@ public interface NotificationRepository extends JpaRepository<Notification, Long
     """)
     List<Notification> getNonDispatchedNotifications(Pageable pageable);
 
+    @Query("""
+        SELECT n
+        FROM Notification n
+        WHERE n.isDispatched = false
+        AND n.user = :user
+    """)
+    List<Notification> findUndispatchedByUser(@Param("user") User user);
+
     Notification findByUserAndTypeAndLastNotifiedAt(User user, NotificationType type, LocalDate date);
+
+    @Query("""
+            SELECT n
+            FROM Notification n
+            WHERE n.user = :user
+            AND n.type = :type
+            AND n.lastNotifiedAt BETWEEN :startDate AND :endDate
+            """)
+    Notification findTodayNotification(
+            @Param("user") User user,
+            @Param("type") NotificationType type,
+            @Param("startDate") LocalDateTime startDate,
+            @Param("endDate") LocalDateTime endDate
+    );
 }

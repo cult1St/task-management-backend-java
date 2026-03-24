@@ -29,6 +29,11 @@ public class UserService {
     private final UserSettingRepository userSettingRepository;
     private final PasswordEncoder passwordEncoder;
 
+
+    public User getUserByUsername(String username){
+        return userRepository.findByEmail(username);
+    }
+
     public User registerUser(String fullName, String email, String password) throws Exception{
         //check if a user exists with this email
         if(userRepository.existsByEmail(email)){

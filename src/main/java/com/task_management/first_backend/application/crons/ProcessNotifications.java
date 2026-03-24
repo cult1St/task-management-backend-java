@@ -22,4 +22,5 @@ public class ProcessNotifications {
         System.out.println("Processed 100 notifications. Took " + difference + " seconds");
     }
 
+
 }
