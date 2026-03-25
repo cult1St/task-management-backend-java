@@ -98,9 +98,9 @@ public class TaskService {
                 .orElseThrow(() -> new EntityNotFoundException("Task not found"));
 
         // Optional: Authorization check (recommended)
-        if (!task.getCreatedBy().getId().equals(currentUser.getId())) {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You are not allowed to update this task");
-        }
+//        if (!task.getCreatedBy().getId().equals(currentUser.getId())) {
+//            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You are not allowed to update this task");
+//        }
 
         // Update title
         if (request.getTitle() != null) {
@@ -127,8 +127,8 @@ public class TaskService {
             task.setDueDate(DateHelper.dateToLocaleDateTime(request.getDueDate()));
         }
 
-        // Update assigned user
-        if (request.getAssignedToId() != null) {
+        // Update assigned user (only change assigned if you are creator)
+        if (request.getAssignedToId() != null && task.getCreatedBy().getId().equals(currentUser.getId())) {
             User assignedTo = userRepository.findById(request.getAssignedToId())
                     .orElseThrow(() -> new EntityNotFoundException("Assigned user not found"));
             if(!Objects.equals(request.getAssignedToId(), task.getAssignedTo().getId())){
