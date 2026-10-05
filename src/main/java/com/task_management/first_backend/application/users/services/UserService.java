@@ -1,14 +1,14 @@
-package com.task_management.first_backend.application.services;
+package com.task_management.first_backend.application.users.services;
 
-import com.task_management.first_backend.application.dto.UserResponseDTO;
-import com.task_management.first_backend.application.dto.users.UpdateUserRequestDTO;
-import com.task_management.first_backend.application.dto.users.UserSettingsRequestDTO;
-import com.task_management.first_backend.application.dto.users.settings.*;
-import com.task_management.first_backend.application.enums.UserRole;
-import com.task_management.first_backend.application.models.User;
-import com.task_management.first_backend.application.models.UserSetting;
-import com.task_management.first_backend.application.repositories.UserRepository;
-import com.task_management.first_backend.application.repositories.UserSettingRepository;
+import com.task_management.first_backend.application.users.dto.UserResponseDTO;
+import com.task_management.first_backend.application.users.dto.users.UpdateUserRequestDTO;
+import com.task_management.first_backend.application.users.dto.users.UserSettingsRequestDTO;
+import com.task_management.first_backend.application.users.dto.users.settings.*;
+import com.task_management.first_backend.application.users.enums.UserRole;
+import com.task_management.first_backend.application.users.models.User;
+import com.task_management.first_backend.application.users.models.UserSetting;
+import com.task_management.first_backend.application.users.repositories.UserRepository;
+import com.task_management.first_backend.application.users.repositories.UserSettingRepository;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -17,9 +17,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.security.InvalidParameterException;
 import java.util.Date;
-import java.util.Optional;
 
 @Service
 @AllArgsConstructor
@@ -49,10 +47,7 @@ public class UserService {
         return userRepository.save(createdUser);
     }
 
-    public void loginTimeStamp(User user){
-        user.setLastLoginAt(new Date());
-        userRepository.save(user);
-    }
+
 
     public User updateUser(UpdateUserRequestDTO request, Long id) {
 

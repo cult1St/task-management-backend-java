@@ -1,4 +1,4 @@
-package com.task_management.first_backend.application.models;
+package com.task_management.first_backend.application.users.models;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

@@ -1,4 +1,4 @@
-package com.backend.fintech.application.core.config;
+package com.task_management.first_backend.application.shared.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

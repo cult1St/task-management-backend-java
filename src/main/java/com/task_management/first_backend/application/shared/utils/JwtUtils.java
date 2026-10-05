@@ -1,12 +1,9 @@
-package com.task_management.first_backend.application.utils;
+package com.task_management.first_backend.application.shared.utils;
 
-import com.task_management.first_backend.application.models.User;
-import com.task_management.first_backend.application.repositories.UserRepository;
-import com.task_management.first_backend.application.services.UserService;
+import com.task_management.first_backend.application.users.models.User;
+import com.task_management.first_backend.application.users.repositories.UserRepository;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;

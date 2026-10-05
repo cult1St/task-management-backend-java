@@ -1,4 +1,4 @@
-package com.backend.fintech.application.core.helpers;
+package com.task_management.first_backend.application.shared.helpers;
 
 import lombok.AllArgsConstructor;
 
@@ -21,5 +21,10 @@ public class CodeGenerator {
                 .format(DateTimeFormatter.ofPattern("yyyyMMddHHmmss"));
         int random = ThreadLocalRandom.current().nextInt(1000, 10000);
         return timestamp + random;
+    }
+
+    public static String generateCode(int number){
+        int bound = (int) Math.pow(10, number);
+        return String.format("%0" + number + "d", secureRandom.nextInt(bound));
     }
 }

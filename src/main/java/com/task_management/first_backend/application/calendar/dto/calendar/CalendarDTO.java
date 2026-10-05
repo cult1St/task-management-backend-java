@@ -1,13 +1,10 @@
-package com.task_management.first_backend.application.dto.calendar;
+package com.task_management.first_backend.application.calendar.dto.calendar;
 
-import com.task_management.first_backend.application.helpers.DateHelper;
-import com.task_management.first_backend.application.models.CalendarEvent;
+import com.task_management.first_backend.application.calendar.models.CalendarEvent;
 import lombok.Data;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.time.ZoneId;
 
 @Data
 public class CalendarDTO {

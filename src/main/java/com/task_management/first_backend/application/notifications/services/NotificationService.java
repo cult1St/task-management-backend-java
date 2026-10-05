@@ -1,14 +1,13 @@
-package com.task_management.first_backend.application.services;
+package com.task_management.first_backend.application.notifications.services;
 
 
-import com.task_management.first_backend.application.dto.notifications.NotificationDTO;
-import com.task_management.first_backend.application.dto.notifications.NotificationDispatchDTO;
-import com.task_management.first_backend.application.enums.NotificationType;
-import com.task_management.first_backend.application.models.CustomUserDetails;
-import com.task_management.first_backend.application.models.Notification;
-import com.task_management.first_backend.application.models.User;
-import com.task_management.first_backend.application.repositories.NotificationRepository;
-import com.task_management.first_backend.application.repositories.UserRepository;
+import com.task_management.first_backend.application.notifications.dto.notifications.NotificationDTO;
+import com.task_management.first_backend.application.notifications.enums.NotificationType;
+import com.task_management.first_backend.application.users.models.CustomUserDetails;
+import com.task_management.first_backend.application.notifications.models.Notification;
+import com.task_management.first_backend.application.users.models.User;
+import com.task_management.first_backend.application.notifications.repositories.NotificationRepository;
+import com.task_management.first_backend.application.users.repositories.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +20,6 @@ import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.messaging.simp.user.SimpUserRegistry;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
-import org.springframework.web.socket.messaging.SessionConnectedEvent;
 import org.springframework.web.socket.messaging.SessionSubscribeEvent;
 
 import java.security.Principal;
@@ -92,19 +90,91 @@ public class NotificationService {
             String message,
             NotificationType type,
             User actor
-    ){
+    ) {
+        return createNotification(user, title, message, type, actor, null, null, null);
+    }
+
+    public NotificationDTO createNotification(
+            User user,
+            String title,
+            String message,
+            NotificationType type,
+            User actor,
+            Long workspaceId,
+            Long channelId,
+            Long dmThreadId
+    ) {
+        NotificationDTO dto = createNotificationWithoutPush(
+                user, title, message, type, actor, workspaceId, channelId, dmThreadId
+        );
+        pushNotificationDto(dto);
+        return dto;
+    }
+
+    /** Persist only — STOMP push is done by caller afterCommit for low latency. */
+    public NotificationDTO createNotificationWithoutPush(
+            User user,
+            String title,
+            String message,
+            NotificationType type,
+            User actor,
+            Long workspaceId,
+            Long channelId,
+            Long dmThreadId
+    ) {
         Notification notification = Notification.builder()
                 .user(user)
                 .title(title)
                 .message(message)
                 .type(type)
                 .actor(actor)
+                .workspaceId(workspaceId)
+                .channelId(channelId)
+                .dmThreadId(dmThreadId)
                 .lastNotifiedAt(LocalDateTime.now())
                 .build();
 
         repository.save(notification);
+        return mapToDTO(notification);
+    }
 
-        return new NotificationDTO(notification);
+    public void pushNotificationDto(NotificationDTO dto) {
+        if (dto == null || dto.getUserId() == null) {
+            return;
+        }
+        User user = userRepository.findById(dto.getUserId()).orElse(null);
+        if (user == null || user.getEmail() == null) {
+            return;
+        }
+        try {
+            messagingTemplate.convertAndSendToUser(
+                    user.getEmail(),
+                    "/queue/notifications",
+                    dto
+            );
+            repository.findById(dto.getId()).ifPresent(notification -> {
+                notification.setDispatched(true);
+                notification.setLastNotifiedAt(LocalDateTime.now());
+                repository.save(notification);
+            });
+        } catch (Exception ex) {
+            System.err.println("Failed to dispatch notification to " + user.getEmail() + ": " + ex.getMessage());
+        }
+    }
+
+    private void dispatchToUser(User user, NotificationDTO dto, Notification notification) {
+        try {
+            messagingTemplate.convertAndSendToUser(
+                    user.getEmail(),
+                    "/queue/notifications",
+                    dto
+            );
+            notification.setDispatched(true);
+            notification.setLastNotifiedAt(LocalDateTime.now());
+            repository.save(notification);
+        } catch (Exception ex) {
+            System.err.println("Failed to dispatch notification to " + user.getEmail() + ": " + ex.getMessage());
+        }
     }
 
     public boolean checkForPrevSent(User user, NotificationType type, LocalDate today) {
@@ -130,8 +200,8 @@ public class NotificationService {
     public void processNotificationsSending(){
         Pageable pageable = PageRequest.of(0, 100);
         List<Notification> pendingNotifications = repository.getNonDispatchedNotifications(pageable);
-        System.out.println("Starting notifications processing");
-        System.out.println("Connected users: " + userRegistry.getUsers());
+       // System.out.println("Starting notifications processing");
+       // System.out.println("Connected users: " + userRegistry.getUsers());
         for(Notification notification: pendingNotifications){
             System.out.println("Starting process for notification. Id " + notification.getId() + " Title: " + notification.getTitle());
             NotificationDTO dispatchDTO = new NotificationDTO(notification);
@@ -175,7 +245,7 @@ public class NotificationService {
 
             for (Notification notification : notifications) {
                 messagingTemplate.convertAndSendToUser(
-                        user.getUsername(),
+                        user.getEmail() != null ? user.getEmail() : user.getUsername(),
                         "/queue/notifications",
                         new NotificationDTO(notification)
                 );

@@ -1,16 +1,17 @@
-package com.task_management.first_backend.application.controllers;
+package com.task_management.first_backend.application.notifications.controllers;
 
-import com.task_management.first_backend.application.dto.SuccessResponse;
-import com.task_management.first_backend.application.dto.invitations.InvitationDTO;
-import com.task_management.first_backend.application.dto.notifications.NotificationCountDTO;
-import com.task_management.first_backend.application.dto.notifications.NotificationDTO;
-import com.task_management.first_backend.application.models.User;
-import com.task_management.first_backend.application.services.NotificationService;
+import com.task_management.first_backend.application.notifications.dto.notifications.NotificationCountDTO;
+import com.task_management.first_backend.application.notifications.dto.notifications.NotificationDTO;
+import com.task_management.first_backend.application.notifications.models.Notification;
+import com.task_management.first_backend.application.notifications.services.NotificationService;
+import com.task_management.first_backend.application.shared.dto.SuccessResponse;
+import com.task_management.first_backend.application.users.models.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
-import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+
+import com.task_management.first_backend.application.notifications.models.Notification;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Objects;

@@ -1,7 +1,7 @@
-package com.task_management.first_backend.application.repositories;
+package com.task_management.first_backend.application.calendar.repositories;
 
-import com.task_management.first_backend.application.models.CalendarEvent;
-import com.task_management.first_backend.application.models.User;
+import com.task_management.first_backend.application.calendar.models.CalendarEvent;
+import com.task_management.first_backend.application.users.models.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

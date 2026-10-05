@@ -1,8 +1,8 @@
-package com.task_management.first_backend.application.dto;
+package com.task_management.first_backend.application.shared.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.task_management.first_backend.application.dto.pagination.PaginationDTO;
-import com.task_management.first_backend.application.dto.pagination.PaginationMetaDTO;
+import com.task_management.first_backend.application.shared.dto.pagination.PaginationDTO;
+import com.task_management.first_backend.application.shared.dto.pagination.PaginationMetaDTO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.springframework.data.domain.Page;

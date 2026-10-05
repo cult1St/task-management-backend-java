@@ -1,19 +1,21 @@
-package com.task_management.first_backend.application.controllers;
+package com.task_management.first_backend.application.tasks.controllers;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.task_management.first_backend.application.dto.SuccessResponse;
-import com.task_management.first_backend.application.dto.tasks.TaskCreateRequestDTO;
-import com.task_management.first_backend.application.dto.tasks.TaskDTO;
-import com.task_management.first_backend.application.dto.tasks.TaskUpdateRequestDTO;
-import com.task_management.first_backend.application.dto.tasks.TaskUpdateStatusRequestDTO;
-import com.task_management.first_backend.application.models.Task;
-import com.task_management.first_backend.application.models.User;
-import com.task_management.first_backend.application.services.TaskService;
+import com.task_management.first_backend.application.shared.dto.SuccessResponse;
+import com.task_management.first_backend.application.tasks.dto.tasks.TaskCreateRequestDTO;
+import com.task_management.first_backend.application.tasks.dto.tasks.TaskDTO;
+import com.task_management.first_backend.application.tasks.dto.tasks.TaskUpdateRequestDTO;
+import com.task_management.first_backend.application.tasks.dto.tasks.TaskUpdateStatusRequestDTO;
+import com.task_management.first_backend.application.tasks.models.Task;
+import com.task_management.first_backend.application.tasks.services.TaskService;
+import com.task_management.first_backend.application.users.models.User;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+
+import com.task_management.first_backend.application.tasks.models.Task;
 import org.springframework.web.bind.annotation.*;
 
 @RestController

@@ -1,12 +1,12 @@
-package com.task_management.first_backend.application.services;
+package com.task_management.first_backend.application.calendar.services;
 
 
-import com.task_management.first_backend.application.dto.calendar.CalendarDTO;
-import com.task_management.first_backend.application.dto.calendar.CalendarRequestDTO;
-import com.task_management.first_backend.application.dto.calendar.CalendarUpdateRequestDTO;
-import com.task_management.first_backend.application.models.CalendarEvent;
-import com.task_management.first_backend.application.models.User;
-import com.task_management.first_backend.application.repositories.CalendarRepository;
+import com.task_management.first_backend.application.calendar.dto.calendar.CalendarDTO;
+import com.task_management.first_backend.application.calendar.dto.calendar.CalendarRequestDTO;
+import com.task_management.first_backend.application.calendar.dto.calendar.CalendarUpdateRequestDTO;
+import com.task_management.first_backend.application.calendar.models.CalendarEvent;
+import com.task_management.first_backend.application.users.models.User;
+import com.task_management.first_backend.application.calendar.repositories.CalendarRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;

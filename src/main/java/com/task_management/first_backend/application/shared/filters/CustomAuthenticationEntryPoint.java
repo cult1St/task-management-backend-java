@@ -1,7 +1,7 @@
-package com.task_management.first_backend.application.filters;
+package com.task_management.first_backend.application.shared.filters;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.task_management.first_backend.application.dto.ErrorResponse;
+import com.task_management.first_backend.application.shared.dto.ErrorResponse;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

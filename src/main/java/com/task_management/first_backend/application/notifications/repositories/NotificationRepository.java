@@ -1,8 +1,8 @@
-package com.task_management.first_backend.application.repositories;
+package com.task_management.first_backend.application.notifications.repositories;
 
-import com.task_management.first_backend.application.enums.NotificationType;
-import com.task_management.first_backend.application.models.Notification;
-import com.task_management.first_backend.application.models.User;
+import com.task_management.first_backend.application.notifications.enums.NotificationType;
+import com.task_management.first_backend.application.notifications.models.Notification;
+import com.task_management.first_backend.application.users.models.User;
 import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

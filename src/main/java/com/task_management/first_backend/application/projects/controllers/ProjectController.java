@@ -1,18 +1,21 @@
-package com.task_management.first_backend.application.controllers;
+package com.task_management.first_backend.application.projects.controllers;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.task_management.first_backend.application.dto.SuccessResponse;
-import com.task_management.first_backend.application.dto.projects.ProjectDTO;
-import com.task_management.first_backend.application.dto.projects.ProjectMemberDTO;
-import com.task_management.first_backend.application.dto.projects.ProjectMemberInviteRequestDTO;
-import com.task_management.first_backend.application.dto.projects.ProjectRequestDTO;
-import com.task_management.first_backend.application.models.User;
-import com.task_management.first_backend.application.services.ProjectService;
+import com.task_management.first_backend.application.projects.dto.projects.ProjectDTO;
+import com.task_management.first_backend.application.projects.dto.projects.ProjectMemberDTO;
+import com.task_management.first_backend.application.projects.dto.projects.ProjectMemberInviteRequestDTO;
+import com.task_management.first_backend.application.projects.dto.projects.ProjectRequestDTO;
+import com.task_management.first_backend.application.projects.models.Project;
+import com.task_management.first_backend.application.projects.services.ProjectService;
+import com.task_management.first_backend.application.shared.dto.SuccessResponse;
+import com.task_management.first_backend.application.users.models.User;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+
+import com.task_management.first_backend.application.projects.models.Project;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -28,12 +31,11 @@ public class ProjectController {
             @RequestParam(name = "status", defaultValue = "All") String status,
             @RequestParam(name = "limit", defaultValue = "20") int size,
             @RequestParam(name = "page", defaultValue = "1") int page
-    ){
-        //set correctly params
+    ) {
         size = size > 0 ? size : 20;
         page = page > 0 ? (page - 1) : 0;
         Page<ProjectDTO> projectpage = projectService
-                .getUserProjects(authUser.getId(), status, page, size);
+                .getUserProjects(authUser, status, page, size);
         return ResponseEntity.ok(
                 SuccessResponse.of("User Projects Fetched Successfully", projectpage)
         );
@@ -43,7 +45,7 @@ public class ProjectController {
     public ResponseEntity<SuccessResponse<ProjectDTO>> createProject(
             @Valid @RequestBody ProjectRequestDTO request,
             @AuthenticationPrincipal User authUser
-    ){
+    ) {
         ProjectDTO response = projectService.createUserProject(authUser, request);
         return ResponseEntity.ok(
                 SuccessResponse.of("Project Created Successfully", response)
@@ -52,11 +54,35 @@ public class ProjectController {
 
     @GetMapping("/{projectId}")
     public ResponseEntity<SuccessResponse<ProjectDTO>> getProject(
-            @PathVariable Long projectId
-    ){
-        ProjectDTO response = projectService.getProjectById(projectId);
+            @PathVariable Long projectId,
+            @AuthenticationPrincipal User authUser
+    ) {
+        ProjectDTO response = projectService.getProjectById(authUser, projectId);
         return ResponseEntity.ok(
                 SuccessResponse.of("Project Details fetched successfully", response)
+        );
+    }
+
+    @PatchMapping("/{projectId}")
+    public ResponseEntity<SuccessResponse<ProjectDTO>> updateProject(
+            @PathVariable Long projectId,
+            @AuthenticationPrincipal User authUser,
+            @RequestBody ProjectRequestDTO request
+    ) {
+        ProjectDTO response = projectService.updateProject(authUser, projectId, request);
+        return ResponseEntity.ok(
+                SuccessResponse.of("Project updated successfully", response)
+        );
+    }
+
+    @DeleteMapping("/{projectId}")
+    public ResponseEntity<SuccessResponse<?>> deleteProject(
+            @PathVariable Long projectId,
+            @AuthenticationPrincipal User authUser
+    ) {
+        projectService.deleteProject(authUser, projectId);
+        return ResponseEntity.ok(
+                SuccessResponse.of("Project deleted successfully")
         );
     }
 
@@ -67,21 +93,23 @@ public class ProjectController {
             @RequestParam(name = "status", defaultValue = "All") String status,
             @RequestParam(name = "limit", defaultValue = "20") int size,
             @RequestParam(name = "page", defaultValue = "1") int page
-    ){
-        //set correctly params
+    ) {
         size = size > 0 ? size : 20;
         page = page > 0 ? (page - 1) : 0;
-        Page<ProjectMemberDTO> response = projectService.getUserProjectMembers(authUser, projectId, status, page, size);
+        Page<ProjectMemberDTO> response = projectService.getUserProjectMembers(
+                authUser, projectId, status, page, size
+        );
         return ResponseEntity.ok(
                 SuccessResponse.of("Project Members fetched successfully", response)
         );
     }
+
     @PostMapping("/{projectId}/invitations")
     public ResponseEntity<SuccessResponse<ProjectMemberDTO>> inviteMember(
             @PathVariable Long projectId,
             @AuthenticationPrincipal User authUser,
             @Valid @RequestBody ProjectMemberInviteRequestDTO requestDTO
-    ){
+    ) {
         ProjectMemberDTO projectMemberRequest = projectService.inviteMember(projectId, requestDTO, authUser);
         return ResponseEntity.ok(
                 SuccessResponse.of("Invitation Request Sent Successfully", projectMemberRequest)
@@ -93,9 +121,9 @@ public class ProjectController {
             @AuthenticationPrincipal User authUser,
             @PathVariable Long projectId,
             @PathVariable Long userId
-    ){
+    ) {
         Boolean deleteMember = projectService.deleteMember(projectId, userId, authUser);
-        return  ResponseEntity.ok(
+        return ResponseEntity.ok(
                 SuccessResponse.of("Member deleted From Project Successfully", deleteMember)
         );
     }

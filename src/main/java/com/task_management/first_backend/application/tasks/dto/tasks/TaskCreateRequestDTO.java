@@ -1,13 +1,12 @@
-package com.task_management.first_backend.application.dto.tasks;
+package com.task_management.first_backend.application.tasks.dto.tasks;
 
-import com.task_management.first_backend.application.enums.TaskPriority;
-import com.task_management.first_backend.application.enums.TaskStatus;
+import com.task_management.first_backend.application.tasks.enums.TaskPriority;
+import com.task_management.first_backend.application.tasks.enums.TaskStatus;
 import jakarta.validation.constraints.Future;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
-import java.time.Instant;
 import java.util.Date;
 
 @Data

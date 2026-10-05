@@ -1,14 +1,16 @@
-package com.task_management.first_backend.application.dto.tasks;
+package com.task_management.first_backend.application.tasks.dto.tasks;
 
-import com.task_management.first_backend.application.enums.TaskPriority;
-import com.task_management.first_backend.application.enums.TaskStatus;
-import com.task_management.first_backend.application.models.Task;
-import lombok.Data;
+import com.task_management.first_backend.application.projects.models.Project;
+import com.task_management.first_backend.application.tasks.enums.TaskPriority;
+import com.task_management.first_backend.application.tasks.enums.TaskStatus;
+import com.task_management.first_backend.application.tasks.models.Task;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.Date;
+import lombok.Data;
 
+import com.task_management.first_backend.application.projects.models.Project;
 @Data
 public class TaskDTO {
 

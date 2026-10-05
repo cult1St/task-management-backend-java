@@ -1,32 +1,36 @@
-package com.task_management.first_backend.application.dto.projects;
+package com.task_management.first_backend.application.projects.dto.projects;
 
-import com.task_management.first_backend.application.enums.ProjectStatus;
-import com.task_management.first_backend.application.helpers.DateHelper;
-import com.task_management.first_backend.application.models.Project;
+import com.task_management.first_backend.application.projects.enums.ProjectStatus;
+import com.task_management.first_backend.application.projects.enums.ProjectType;
+import com.task_management.first_backend.application.shared.helpers.DateHelper;
+import com.task_management.first_backend.application.projects.models.Project;
 import lombok.Data;
-
-import java.time.LocalDate;
-import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
-import java.util.Date;
 
 @Data
 public class ProjectDTO {
     private Long id;
     private String name;
     private String description;
+    private String key;
+    private ProjectType projectType;
+    private Long workspaceId;
     private ProjectStatus status;
     private int progress;
     private String dueDate;
 
-    public ProjectDTO(Project project){
+    public ProjectDTO(Project project) {
         setId(project.getId());
         setName(project.getName());
         setDescription(project.getDescription());
+        setKey(project.getKey());
+        setProjectType(project.getProjectType());
+        if (project.getWorkspace() != null) {
+            setWorkspaceId(project.getWorkspace().getId());
+        }
         setStatus(project.getStatus());
         setProgress(project.getProgress());
-        String dueDate = DateHelper.formatDateToMD(project.getDueDate());
-        setDueDate(dueDate);
+        if (project.getDueDate() != null) {
+            setDueDate(DateHelper.formatDateToMD(project.getDueDate()));
+        }
     }
 }
-

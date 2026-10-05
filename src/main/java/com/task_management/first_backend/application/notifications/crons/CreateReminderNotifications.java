@@ -1,20 +1,21 @@
-package com.task_management.first_backend.application.crons;
+package com.task_management.first_backend.application.notifications.crons;
 
-import com.task_management.first_backend.application.enums.NotificationType;
-import com.task_management.first_backend.application.models.Task;
-import com.task_management.first_backend.application.models.User;
-import com.task_management.first_backend.application.services.NotificationService;
-import com.task_management.first_backend.application.services.TaskService;
-import lombok.RequiredArgsConstructor;
+import com.task_management.first_backend.application.notifications.enums.NotificationType;
+import com.task_management.first_backend.application.notifications.models.Notification;
+import com.task_management.first_backend.application.notifications.services.NotificationService;
+import com.task_management.first_backend.application.tasks.models.Task;
+import com.task_management.first_backend.application.tasks.services.TaskService;
+import com.task_management.first_backend.application.users.models.User;
+import java.time.Duration;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import lombok.extern.slf4j.Slf4j;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.domain.Page;
 import org.springframework.scheduling.annotation.Scheduled;
 
-import java.time.Duration;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-
+import com.task_management.first_backend.application.notifications.models.Notification;
 @Configuration
 @RequiredArgsConstructor
 @Slf4j

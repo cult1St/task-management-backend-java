@@ -1,12 +1,11 @@
-package com.task_management.first_backend.application.controllers;
+package com.task_management.first_backend.application.projects.controllers;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.task_management.first_backend.application.dto.SuccessResponse;
-import com.task_management.first_backend.application.dto.invitations.InvitationDTO;
-import com.task_management.first_backend.application.dto.invitations.InvitationRespondRequestDTO;
-import com.task_management.first_backend.application.dto.projects.ProjectDTO;
-import com.task_management.first_backend.application.models.User;
-import com.task_management.first_backend.application.services.ProjectService;
+import com.task_management.first_backend.application.shared.dto.SuccessResponse;
+import com.task_management.first_backend.application.projects.dto.invitations.InvitationDTO;
+import com.task_management.first_backend.application.projects.dto.invitations.InvitationRespondRequestDTO;
+import com.task_management.first_backend.application.users.models.User;
+import com.task_management.first_backend.application.projects.services.ProjectService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;

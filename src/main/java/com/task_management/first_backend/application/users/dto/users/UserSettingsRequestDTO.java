@@ -1,8 +1,10 @@
-package com.task_management.first_backend.application.dto.users;
+package com.task_management.first_backend.application.users.dto.users;
 
-import com.task_management.first_backend.application.models.UserSetting;
+import com.task_management.first_backend.application.users.models.UserSetting;
+import com.task_management.first_backend.application.workspace.models.Workspace;
 import lombok.Data;
 
+import com.task_management.first_backend.application.workspace.models.Workspace;
 @Data
 public class UserSettingsRequestDTO {
     private Notifications notifications;

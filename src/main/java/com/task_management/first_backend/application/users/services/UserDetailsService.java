@@ -1,7 +1,7 @@
-package com.task_management.first_backend.application.services;
+package com.task_management.first_backend.application.users.services;
 
-import com.task_management.first_backend.application.models.User;
-import com.task_management.first_backend.application.repositories.UserRepository;
+import com.task_management.first_backend.application.users.models.User;
+import com.task_management.first_backend.application.users.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;

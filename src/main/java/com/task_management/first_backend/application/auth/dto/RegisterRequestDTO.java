@@ -1,4 +1,4 @@
-package com.task_management.first_backend.application.core.dto.auth;
+package com.task_management.first_backend.application.auth.dto;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;

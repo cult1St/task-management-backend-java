@@ -1,4 +1,4 @@
-package com.task_management.first_backend.application.dto.calendar;
+package com.task_management.first_backend.application.calendar.dto.calendar;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;

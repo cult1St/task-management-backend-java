@@ -1,35 +1,33 @@
-package com.task_management.first_backend.application.services;
+package com.task_management.first_backend.application.tasks.services;
 
-import com.task_management.first_backend.application.dto.tasks.TaskCreateRequestDTO;
-import com.task_management.first_backend.application.dto.tasks.TaskDTO;
-import com.task_management.first_backend.application.dto.tasks.TaskUpdateRequestDTO;
-import com.task_management.first_backend.application.dto.tasks.TaskUpdateStatusRequestDTO;
-import com.task_management.first_backend.application.enums.NotificationType;
-import com.task_management.first_backend.application.enums.TaskPriority;
-import com.task_management.first_backend.application.enums.TaskStatus;
-import com.task_management.first_backend.application.helpers.DateHelper;
-import com.task_management.first_backend.application.models.Project;
-import com.task_management.first_backend.application.models.Task;
-import com.task_management.first_backend.application.models.User;
-import com.task_management.first_backend.application.repositories.ProjectRepository;
-import com.task_management.first_backend.application.repositories.TaskRepository;
-import com.task_management.first_backend.application.repositories.UserRepository;
+import com.task_management.first_backend.application.notifications.enums.NotificationType;
+import com.task_management.first_backend.application.notifications.services.NotificationService;
+import com.task_management.first_backend.application.projects.models.Project;
+import com.task_management.first_backend.application.projects.repositories.ProjectRepository;
+import com.task_management.first_backend.application.shared.helpers.DateHelper;
+import com.task_management.first_backend.application.tasks.dto.tasks.TaskCreateRequestDTO;
+import com.task_management.first_backend.application.tasks.dto.tasks.TaskDTO;
+import com.task_management.first_backend.application.tasks.dto.tasks.TaskUpdateRequestDTO;
+import com.task_management.first_backend.application.tasks.dto.tasks.TaskUpdateStatusRequestDTO;
+import com.task_management.first_backend.application.tasks.enums.TaskPriority;
+import com.task_management.first_backend.application.tasks.enums.TaskStatus;
+import com.task_management.first_backend.application.tasks.models.Task;
+import com.task_management.first_backend.application.tasks.repositories.TaskRepository;
+import com.task_management.first_backend.application.users.models.User;
+import com.task_management.first_backend.application.users.repositories.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
+import java.time.LocalDateTime;
+import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Objects;
-
+import com.task_management.first_backend.application.notifications.services.NotificationService;
 @Service
 @RequiredArgsConstructor
 @Transactional

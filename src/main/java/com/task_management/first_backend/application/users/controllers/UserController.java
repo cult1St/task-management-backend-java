@@ -1,10 +1,10 @@
-package com.task_management.first_backend.application.controllers;
+package com.task_management.first_backend.application.users.controllers;
 
-import com.task_management.first_backend.application.dto.SuccessResponse;
-import com.task_management.first_backend.application.dto.UserResponseDTO;
-import com.task_management.first_backend.application.dto.users.UpdateUserRequestDTO;
-import com.task_management.first_backend.application.models.User;
-import com.task_management.first_backend.application.services.UserService;
+import com.task_management.first_backend.application.shared.dto.SuccessResponse;
+import com.task_management.first_backend.application.users.dto.UserResponseDTO;
+import com.task_management.first_backend.application.users.dto.users.UpdateUserRequestDTO;
+import com.task_management.first_backend.application.users.models.User;
+import com.task_management.first_backend.application.users.services.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;

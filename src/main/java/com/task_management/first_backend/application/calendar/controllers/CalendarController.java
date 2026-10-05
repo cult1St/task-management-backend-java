@@ -1,13 +1,12 @@
-package com.task_management.first_backend.application.controllers;
+package com.task_management.first_backend.application.calendar.controllers;
 
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.task_management.first_backend.application.dto.SuccessResponse;
-import com.task_management.first_backend.application.dto.calendar.CalendarDTO;
-import com.task_management.first_backend.application.dto.calendar.CalendarRequestDTO;
-import com.task_management.first_backend.application.dto.calendar.CalendarUpdateRequestDTO;
-import com.task_management.first_backend.application.models.User;
-import com.task_management.first_backend.application.services.CalendarService;
+import com.task_management.first_backend.application.shared.dto.SuccessResponse;
+import com.task_management.first_backend.application.calendar.dto.calendar.CalendarDTO;
+import com.task_management.first_backend.application.calendar.dto.calendar.CalendarRequestDTO;
+import com.task_management.first_backend.application.calendar.dto.calendar.CalendarUpdateRequestDTO;
+import com.task_management.first_backend.application.users.models.User;
+import com.task_management.first_backend.application.calendar.services.CalendarService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;

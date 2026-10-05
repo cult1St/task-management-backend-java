@@ -1,4 +1,6 @@
-package com.task_management.first_backend.application.models;
+package com.task_management.first_backend.application.calendar.models;
+
+import com.task_management.first_backend.application.users.models.User;
 
 import jakarta.persistence.*;
 import lombok.*;

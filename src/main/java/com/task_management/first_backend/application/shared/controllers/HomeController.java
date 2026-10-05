@@ -1,4 +1,4 @@
-package com.task_management.first_backend.application.controllers;
+package com.task_management.first_backend.application.shared.controllers;
 
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.stereotype.Controller;

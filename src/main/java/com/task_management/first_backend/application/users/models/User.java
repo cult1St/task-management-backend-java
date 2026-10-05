@@ -1,12 +1,20 @@
-package com.task_management.first_backend.application.models;
+package com.task_management.first_backend.application.users.models;
 
-import com.task_management.first_backend.application.enums.UserRole;
+import com.task_management.first_backend.application.auth.models.OnboardingRequest;
+import com.task_management.first_backend.application.notifications.models.Notification;
+import com.task_management.first_backend.application.projects.models.Project;
+import com.task_management.first_backend.application.projects.models.ProjectUser;
+import com.task_management.first_backend.application.tasks.models.Task;
+import com.task_management.first_backend.application.users.enums.UserRole;
+
+import com.task_management.first_backend.application.notifications.models.Notification;
+import com.task_management.first_backend.application.projects.models.Project;
+import com.task_management.first_backend.application.projects.models.ProjectUser;
+import com.task_management.first_backend.application.tasks.models.Task;
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
-import org.springframework.data.annotation.CreatedDate;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -35,9 +43,14 @@ public class User implements UserDetails {
     private String password;
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
+    @Builder.Default
     private UserRole role = UserRole.USER;
     private String designatedRole;
     private String avatarUrl;
+
+    /** Active workspace for /workspaces/current/* resolution (multi-workspace). */
+    @Column(name = "active_workspace_id")
+    private Long activeWorkspaceId;
 
     //user setting
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -62,6 +75,10 @@ public class User implements UserDetails {
     private List<Notification> notifications;
     @OneToMany(mappedBy = "actor", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Notification> sentNotifications;
+
+    //onboarding
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private OnboardingRequest onboarding;
 
     @CreationTimestamp
     private Date lastLoginAt;

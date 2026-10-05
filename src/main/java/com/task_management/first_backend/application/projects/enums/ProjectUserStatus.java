@@ -1,4 +1,4 @@
-package com.task_management.first_backend.application.enums;
+package com.task_management.first_backend.application.projects.enums;
 
 public enum ProjectUserStatus {
     ACCEPTED,

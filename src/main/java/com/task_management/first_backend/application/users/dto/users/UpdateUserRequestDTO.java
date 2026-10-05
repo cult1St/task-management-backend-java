@@ -1,4 +1,4 @@
-package com.task_management.first_backend.application.dto.users;
+package com.task_management.first_backend.application.users.dto.users;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;

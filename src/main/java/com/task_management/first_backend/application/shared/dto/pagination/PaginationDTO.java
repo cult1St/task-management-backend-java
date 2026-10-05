@@ -1,4 +1,4 @@
-package com.task_management.first_backend.application.dto.pagination;
+package com.task_management.first_backend.application.shared.dto.pagination;
 
 import lombok.Data;
 import org.springframework.data.domain.Page;

@@ -1,9 +1,9 @@
-package com.task_management.first_backend.application.core.filters;
+package com.task_management.first_backend.application.auth.filters;
 
-import com.task_management.first_backend.application.core.models.CustomUserDetails;
-import com.task_management.first_backend.application.core.models.User;
-import com.task_management.first_backend.application.core.repositories.UserRepository;
-import com.task_management.first_backend.application.core.utils.JwtUtils;
+import com.task_management.first_backend.application.users.models.CustomUserDetails;
+import com.task_management.first_backend.application.users.models.User;
+import com.task_management.first_backend.application.users.repositories.UserRepository;
+import com.task_management.first_backend.application.shared.utils.JwtUtils;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

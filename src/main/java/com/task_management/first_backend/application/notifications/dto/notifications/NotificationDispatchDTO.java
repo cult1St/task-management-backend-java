@@ -1,6 +1,6 @@
-package com.task_management.first_backend.application.dto.notifications;
+package com.task_management.first_backend.application.notifications.dto.notifications;
 
-import com.task_management.first_backend.application.models.Notification;
+import com.task_management.first_backend.application.notifications.models.Notification;
 import lombok.Data;
 
 @Data

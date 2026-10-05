@@ -1,6 +1,9 @@
-package com.task_management.first_backend.application.models;
+package com.task_management.first_backend.application.projects.models;
 
-import com.task_management.first_backend.application.enums.ProjectUserStatus;
+import com.task_management.first_backend.application.projects.enums.ProjectUserStatus;
+import com.task_management.first_backend.application.users.models.User;
+
+import com.task_management.first_backend.application.users.models.User;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;

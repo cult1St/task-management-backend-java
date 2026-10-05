@@ -1,11 +1,11 @@
-version: '3.8'
-
 services:
   app:
     build: .
     container_name: spring_app
     ports:
-      - "8080:8080"
+      # Host 8080 → container 8012 (matches server.port in application.properties)
+      - "8080:8012"
+      - "8012:8012"
     depends_on:
       - db
     environment:
@@ -13,6 +13,7 @@ services:
       SPRING_DATASOURCE_USERNAME: postgres
       SPRING_DATASOURCE_PASSWORD: password
       SPRING_JPA_HIBERNATE_DDL_AUTO: update
+      SERVER_PORT: 8012
     restart: always
 
   db:

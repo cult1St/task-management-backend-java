@@ -1,4 +1,4 @@
-package com.task_management.first_backend.application.dto.projects;
+package com.task_management.first_backend.application.projects.dto.projects;
 
 import lombok.Data;
 

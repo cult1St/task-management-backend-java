@@ -1,8 +1,8 @@
-package com.task_management.first_backend.application.repositories;
+package com.task_management.first_backend.application.projects.repositories;
 
-import com.task_management.first_backend.application.enums.ProjectUserStatus;
-import com.task_management.first_backend.application.models.ProjectUser;
-import com.task_management.first_backend.application.models.User;
+import com.task_management.first_backend.application.projects.enums.ProjectUserStatus;
+import com.task_management.first_backend.application.projects.models.ProjectUser;
+import com.task_management.first_backend.application.users.models.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

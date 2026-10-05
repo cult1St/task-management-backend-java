@@ -1,4 +1,4 @@
-package com.task_management.first_backend.application.dto.users.settings;
+package com.task_management.first_backend.application.users.dto.users.settings;
 
 import lombok.Data;
 

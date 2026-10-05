@@ -1,9 +1,8 @@
-package com.task_management.first_backend.application.dto.projects;
+package com.task_management.first_backend.application.projects.dto.projects;
 
-import com.task_management.first_backend.application.enums.ProjectUserStatus;
-import com.task_management.first_backend.application.helpers.DateHelper;
-import com.task_management.first_backend.application.models.ProjectUser;
-import com.task_management.first_backend.application.models.User;
+import com.task_management.first_backend.application.projects.enums.ProjectUserStatus;
+import com.task_management.first_backend.application.shared.helpers.DateHelper;
+import com.task_management.first_backend.application.projects.models.ProjectUser;
 import lombok.Data;
 
 @Data

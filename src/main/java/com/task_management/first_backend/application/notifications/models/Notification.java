@@ -1,7 +1,9 @@
-package com.task_management.first_backend.application.models;
+package com.task_management.first_backend.application.notifications.models;
 
-import com.task_management.first_backend.application.enums.NotificationStatus;
-import com.task_management.first_backend.application.enums.NotificationType;
+import com.task_management.first_backend.application.notifications.enums.NotificationType;
+import com.task_management.first_backend.application.users.models.User;
+
+import com.task_management.first_backend.application.users.models.User;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -39,6 +41,10 @@ public class Notification {
 
     @Enumerated(EnumType.STRING)
     private NotificationType type = NotificationType.OTHERS;
+
+    private Long workspaceId;
+    private Long channelId;
+    private Long dmThreadId;
 
     private boolean isDispatched = false;
     private Date readAt;
